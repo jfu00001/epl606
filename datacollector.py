@@ -24,7 +24,7 @@ def executeSomething():
 			mycursor.execute(sql, val)
 
 			mydb.commit()
-	time.sleep(10)
+	time.sleep(300)
 
 while True:
     executeSomething()
