@@ -1,0 +1,319 @@
+<!-- Note 1: Sample application can be run on localhost. Code changes needed when changing the hostname. 
+	 Note 2: API keys and client ids need to be generated from the developers' websites/consoles 
+	 of Google Calendar, Facebook and LinkedIn for authentication and use of their APIs in the
+	 H5CM plug-ins and sample application. -->
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<title>Module example</title>	
+		<link rel="stylesheet" href="assets/css/bootstrap.css">
+		<link rel="stylesheet" href="assets/css/h5cm.css">
+		
+		<!-- jQuery external library needs to be loaded first as other libraries often depend on it -->
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+
+		<!-- loading other external libraries -->
+		<script src="assets/scripts/q.framework.js" type="text/javascript"></script>
+		
+		<!-- loading h5cm libraries -->
+		<script src="assets/scripts/read.file.js" type="text/javascript"></script>
+		<script src="context/ContextManagerSingleton.js" type="text/javascript"></script>
+		
+		<!-- this is for authenticating the web application on Linkedin -->
+		<script type="text/javascript" src="https://platform.linkedin.com/in.js">
+			api_key:    'ADD YOUR APP API KEY HERE' // you need to register your application to
+													// LinkedIn - to get a key and add allowed
+													// domains that can make a call to LinkedIn API.
+													// Go to https://developer.linkedin.com/
+			authorize: true
+		</script>
+		
+		<!-- this is for authenticating the web application on Google and loading client library -->
+		<script src="https://apis.google.com/js/client.js">
+		</script>
+		
+		<!-- **ContextAwareApplication -->
+		<!-- loading the web application script - changed with your app name -->
+		<script src='ContextAwareApplication.js' type='text/javascript'></script>
+		<!-- ContextAwareApplication** -->
+		
+		 <!-- Chart Javascript (Chart, Dropdown ) -->
+		<script src="http://code.highcharts.com/highcharts.js"></script>
+		<script src="http://code.highcharts.com/modules/exporting.js"></script>
+		<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+		 
+	</head>
+	
+	<body> 
+	
+	<table id="box-table-a" >
+
+	<thead>
+    	<tr>
+        	<th scope="col">H5CM Plugin</th>
+            <th scope="col">H5CM Plugin</th>
+            <th scope="col">H5CM Plugin</th>
+        </tr>
+    </thead>
+    
+	<tbody>
+
+			<tr>
+			<!-- **FacebookConnect -->
+			<td>
+			 <div id="fb-root">
+			  <div id="fbLogin" style="display:none">
+			 <h1> Facebook Connect </h1>
+			 <a href="#" onclick=FacebookLogin("http://localhost/h5cm/ContextAwareApplication.html"); return false;>
+				<img src="assets/images/fbLogin.png" alt="HTML tutorial">
+			</a>
+			 </div>
+			 
+			  <div id="fbLogout" style="display:none">
+			 
+			 <a href = "#" onclick="FacebookLogout('http://localhost/h5cm/ContextAwareApplication.html'); hidestuff('fbInfo');">
+				<img src="assets/images/fbLogout.png" alt="HTML tutorial">
+			</a>
+			</div>
+			 </div>
+			 
+			<!-- FacebookConnect** -->
+			
+			<!-- **FacebookInformation -->
+			<div id="fbInfo" style="display:none">
+				<h1> Facebook Information </h1>
+				<p>Facebook info is-> <output id="facebookInfo"></output></p>
+				</div>
+			</td>
+			<!-- FacebookInformation** -->
+			
+			<!-- **LinkedInConnect -->
+			<td>
+			<div id="liLogin" style="display:none">
+				<h1> LinkedIn Connect </h1>
+				<script type="IN/Login"></script>
+			</div>
+			
+			<div id="liLogout" style="display:none">
+				<a href="#" onclick="IN.User.logout(); hidestuff('liInfo'); return false;">
+				<img src="assets/images/linkedinLogout.png" alt="HTML tutorial" style="width:180px;height:40px;border:0">
+				</a>
+			</div>
+			<!-- LinkedInConnect** -->
+			
+			<!-- **LinkedInInformation -->
+			<div id="liInfo" style="display:none">
+				<h1> LinkedIn Information </h1>
+				<p>LinkedIn info is-> <output id="linkedInInfo"></output></p>
+			</div>
+			</td>
+			<!-- LinkedInInformation** -->
+			
+			<!-- **GPSCoordinates -->
+			<td>
+			  <h1> GPSCoordinates </h1> 
+			  <p><output id="gpsCoordinates"></output></p>
+			</td>
+			<!-- GPSCoordinates** -->
+			</tr>
+
+
+			<tr>
+			
+			<!-- **BatteryLevel -->
+			<td>
+			  <h1> Battery Level </h1> 
+			  <p><output id="batteryLevel"></output></p>
+			</td>
+			<!-- BatteryLevel** -->
+			
+			<!-- **BatteryIsCharging -->
+			<td>
+			  <h1> Battery Charging </h1> 
+			  <p><output id="isBatteryCharging"></output></p>
+			</td>
+			<!-- BatteryIsCharging** -->
+			
+			<!-- **DeviceMotion -->
+			<td>
+			  <h1> Device Motion </h1> 
+			  <p><output id="dm_rawAcceleration"></output></p>
+			  <p><output id="dm_tiltLR"></output></p>
+			  <p><output id="dm_tiltFB"></output></p>
+			</td>
+			<!-- DeviceMotion** -->
+			</tr>
+
+
+			<tr>
+			<!-- **DeviceOrientation -->
+			<td>
+			  <h1> Device Orientation </h1> 
+			  <p><output id="do_tiltLR"></output></p>
+			  <p><output id="do_tiltFB"></output></p>
+			  <p><output id="do_direction"></output></p>
+			</td>
+			<!-- DeviceOrientation** -->
+			
+			<!-- **NetworkStatus -->
+			<td>
+			 <h1> Network API </h1>
+			  <p>Network connection available?-> <output id="networkStatus"></output></p>
+			</td>
+			<!-- NetworkStatus** -->
+			
+			<!-- **WebService -->
+			<td>
+			<h1> Connect to Weather Web Service </h1> 
+			  <p>Web Service Result-> <output id="webService1"></output></p>
+			</td>
+			<!-- WebService** -->
+			</tr>	
+
+
+			<tr>
+			<!-- **RestfulService -->
+			<td>
+			 <h1> Connect RESTful Service1 </h1> 
+			  <p>RESTful Service Result-> <output id="restfulService1"></output></p>
+			</td>
+			<!-- RestfulService** -->
+			
+			<!-- **RestfulService -->
+			<td>
+			 <h1> Connect RESTful Service2 </h1> 
+			  <p>RESTful Service Result-> <output id="restfulService2"></output></p>
+			</td>
+			<!-- RestfulService** -->
+			
+			<!-- **FacebookPosts -->
+			<td>
+			<h1> Facebook Posts Reasoner </h1> 
+			  <p>Facebook Restaurant Posts-> <output id="facebookPosts"></output></p>
+			</td>
+			<!-- FacebookPosts** -->
+			</tr>
+
+
+			<tr>
+			<!-- **BatteryAnalyser -->
+			<td colspan="3">
+			<h1> Battery Analyser Reasoner </h1> 
+			  <p>Battery Analysis-> <output id="batteryAnalyser"></output></p>
+			</td>
+			<!-- BatteryAnalyser** -->
+			</tr>
+			
+			
+			<tr>
+			<!-- **SensoManConnect -->
+			<td colspan="3">
+			<h1> SensoMan Authentication Panel </h1> 
+			<div class="sensoManAuthentication">
+				<div id="sensoManLogin" style="display:block">
+					<div class="col-md-4 col-md-offset-4">
+						<div class="login-panel panel panel-default">
+							<div class="panel-heading">
+								<h3 class="panel-title">Please Sign In</h3>
+							</div>
+							<div class="panel-body">
+								<form role="form">
+									<fieldset>
+										<div class="form-group">
+											<input class="form-control" placeholder="Username" name="username" type="text" id="username" autofocus>
+										</div>
+										<div class="form-group">
+											<input class="form-control" placeholder="Password" name="password" type="password" id="password" value="">
+										</div>
+										<!-- Change this to a button or input when using this as a form -->
+										<button type="button" class="btn btn-lg btn-success btn-block" onclick="loginSensoMan()" id="login">Login</button>
+									</fieldset>
+								</form>
+								<div>
+									<span class="label label-danger" id="errormessage"></span>
+								</div>
+							</div>
+						</div>
+						</div>
+					</div>
+					<div id="sensoManLogout" style="display:none">
+						<a href="#" onclick="logOutFromSensoMan(); hidestuff('sensoManLogout'); return false;">
+						<img src="assets/images/logout-button.png" alt="HTML tutorial" style="width:64px;height:64px;border:0">
+						</a>
+					</div>
+			</div>
+			</td>
+			<!-- SensoManConnect** -->
+			</tr>
+			
+			<tr>
+			<!-- **SensoManChart -->
+			<td colspan="3">
+			<h1> SensoMan Chart </h1> 
+			  <p>SensoMan Chart Retrieved Data->
+				<div class="dropdown">
+					<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" id="dropdownTempSensors">Select Sensor
+					<span class="caret"></span></button>
+					<ul class="dropdown-menu" id="SensorsCharts">
+					</ul>
+				</div>
+				<output id="SensorChart"></output>
+			  </p>
+			</td>
+			<!-- SensoManChart** -->
+			</tr>
+			
+			<tr>
+			<!-- **SensoManAllSensors -->
+			<td colspan="3">
+			<h1> SensoMan All Sensors </h1> 
+			  <p>SensoMan All Sensors Retrieved Data-> <output id="sensoManAllSensors" ></output></p>
+			</td>
+			<!-- SensoManAllSensors** -->
+			</tr>
+			
+			<tr>
+			<!-- **SensoManSensorHistory -->
+			<td colspan="3">
+			<h1> SensoMan Sensor History</h1> 
+			  <p>SensoMan Sensor Retrieved History Data-> <output id="sensoManSensorHistory"></output></p>
+			</td>
+			<!-- SensoManSensorHistory** -->
+			</tr>
+			
+			
+			<tr>
+			<!-- **DateTime -->
+			<td>
+			  <h1> Date Time </h1> 
+			  <p><output id="dateTime"></output></p>
+			</td>
+			<!-- DateTime** -->
+			
+			<!-- **GoogleCalendarConnect -->
+			<td>
+			 <div id="authorize-div">
+			  <span>Authorize access to Google Calendar API</span>
+			  <!--Button for the user to click to initiate auth sequence -->
+			  <button id="authorize-button" onclick="handleGoogleConnect(event)">
+				Authorize
+			  </button>
+			 </div>
+			 
+			<!-- GoogleCalendarConnect** -->
+			
+			<!-- **GoogleCalendar -->
+			<div id="googleCalendar" style="display:none">
+				<h1> GoogleCalendar Information </h1>
+				<p>GoogleCalendar info is-> <output id="googleCalendarInfo"></output></p>
+				</div>
+			</td>
+			<!-- GoogleCalendar** -->
+			
+			</tr>
+
+			</tbody>
+			</table>	
+		</div>  
+	</body>
+</html>

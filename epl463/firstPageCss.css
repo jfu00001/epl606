@@ -1,0 +1,20 @@
+body {
+  text-align: center;
+  background-color:  #E0FFFF ;
+ }
+
+a{
+    border: solid;
+    color: white;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+}
+#page-wrap { 
+  position: absolute; 
+  left: 50%; 
+  width: 800px;
+  margin-left: -400px;
+  margin-top:100px;
+}
