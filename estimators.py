@@ -1,9 +1,8 @@
 import mysql.connector
 import pandas
+
 from sklearn.preprocessing import MinMaxScaler
-from sklearn.cluster import KMeans
 from sklearn.metrics import mean_squared_error as mse
-from sklearn import cross_validation
 
 import sklearn.model_selection as model_selection
 import sklearn.ensemble as ensemble
@@ -51,37 +50,48 @@ def train(parkingID):
     #print(dataset)
     targetSet = createAvailabilityGroups(dataset)
     #print(targetSet)
+    del dataset['space']
 
-    del dataset['space'] 
-    trainSet,testSet,trainTarget,testTarget = cross_validation.train_test_split(dataset,targetSet,test_size=0.4,random_state=0)
+    trainSet,testSet,trainTarget,testTarget = model_selection.train_test_split(dataset,targetSet,test_size=0.4,random_state=0)
     
-	# Spot Check Algorithms
-	models = []
-	models.append(('ARD', linear_model.ARDRegression()))   
-	models.append(('RidgeCV', linear_model.RidgeCV(cv=model_selection.KFold(n_splits=10,random_state=0))))
-	models.append(('BR', linear_model.BayesianRidge()))
-	models.append(('Huber', linear_model.HuberRegressor()))
-	models.append(('Lars', linear_model.LarsCV(cv=model_selection.KFold(n_splits=10,random_state=0))))
-	models.append(('Lasso', linear_model.LassoCV(cv=model_selection.KFold(n_splits=10,random_state=0))))
-	models.append(('Linear', linear_model.LinearRegression()))
-	models.append(('Logistic', linear_model.LogisticRegression())) 
-	models.append(('AB', ensemble.AdaBoostRegressor()))
-	models.append(('ET', ExtraTreesRegressor(n_estimators=400,max_features=3,random_state=0)))
-	models.append(('RF', ensemble.RandomForestRegressor(n_estimators=400,max_features=3,random_state=0)))
-	models.append(('PA', linear_model.PassiveAggressiveRegressor(random_state=0)))
-	models.append(('NB', GaussianNB()))
-	models.append(('SVM', SVC()))
-	models.append(('LDA', LinearDiscriminantAnalysis()))
+    # Spot Check Algorithms
+    models = []
+    models.append(('ARD', linear_model.ARDRegression()))   
+    models.append(('RidgeCV', linear_model.RidgeCV(cv=model_selection.KFold(n_splits=10,random_state=0))))
+    models.append(('BayisionRidge', linear_model.BayesianRidge()))
+    models.append(('Huber', linear_model.HuberRegressor()))
+    models.append(('Lars', linear_model.LarsCV(cv=model_selection.KFold(n_splits=10,random_state=0))))
+    models.append(('Lasso', linear_model.LassoCV(cv=model_selection.KFold(n_splits=10,random_state=0))))
+    models.append(('Linear', linear_model.LinearRegression()))
+    models.append(('Logistic', linear_model.LogisticRegression())) 
+    models.append(('AdaBoost', ensemble.AdaBoostRegressor()))
+    models.append(('ExtraTree', ExtraTreesRegressor(n_estimators=100, random_state=0)))
+    models.append(('RandomForest', ensemble.RandomForestRegressor(n_estimators=100, random_state=0)))
+    models.append(('PassiveAgressive', linear_model.PassiveAggressiveRegressor(random_state=0)))
+    models.append(('GaussionNB', GaussianNB()))
+    models.append(('SVM', SVC()))
+    models.append(('LDA', LinearDiscriminantAnalysis()))
 
-	# evaluate each model in turn
-	results = []
-	names = []
-	for name, model in models:
-		estimator = model.fit(trainSet,trainTarget)
-		prediction = estimator.predict(testSet)
-		mean_squared_error(prediction, testTarget)
-		print "%s MSE for parking %d: %f" % name, (int(parkingID), mse(predictions, testTarget))
+    # evaluate each model in turn
+    results = []
+    names = []
+    print "MSE for parking %d" % int(parkingID)
+    print "-----------------"
+    best=""
+    bestMSE=100
+    for name, model in models:
+        estimator = model.fit(trainSet,trainTarget)
+	# testSet contains timestamps, for user request replace testSet with user input
+        prediction = estimator.predict(testSet)	
+        error = mse(prediction,testTarget)
+        print "%s: %f" % (name,error)
+        if error < bestMSE:
+            bestMSE=error
+            best=name
 
+    print"\nBest: %s\t\tMSE: %f" %(best,bestMSE)
+
+# for each parkingID
 train(2)
 #train(4)
 #train(5)
