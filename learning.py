@@ -13,8 +13,10 @@ def getData():
 	cursor.execute(query)
 	data = cursor.fetchall()
 	
-	print data[0]
-	
+	for i in data:
+		print i
+		break
+		
 	cursor.close ()
 	mydb.close ()
 	
