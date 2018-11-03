@@ -10,14 +10,13 @@ from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
 import sklearn.linear_model as linear_model
 from sklearn.naive_bayes import GaussianNB
 from sklearn.svm import SVC
-from sklearn.ensemble import ExtraTreesRegressor
 
 def getData(parkingID):
     mydb = mysql.connector.connect(
         host="localhost",
-	user="ubuntu",
-	passwd="epl606",
-	database="parking"
+		user="ubuntu",
+		passwd="epl606",
+		database="parking"
     )
 
     query = "SELECT * FROM data WHERE parking_id = " + str(parkingID) 
@@ -43,7 +42,7 @@ def createAvailabilityGroups(data):
     
     return target
 
-def train(parkingID):
+def evaluate(parkingID):
     dataset = getData(int(parkingID))
     #print(dataset)
     normalize(dataset)
@@ -65,7 +64,7 @@ def train(parkingID):
     models.append(('Linear', linear_model.LinearRegression()))
     models.append(('Logistic', linear_model.LogisticRegression())) 
     models.append(('AdaBoost', ensemble.AdaBoostRegressor()))
-    models.append(('ExtraTree', ExtraTreesRegressor(n_estimators=100, random_state=0)))
+    models.append(('ExtraTree', ensemble.ExtraTreesRegressor(n_estimators=100, random_state=0)))
     models.append(('RandomForest', ensemble.RandomForestRegressor(n_estimators=100, random_state=0)))
     models.append(('PassiveAgressive', linear_model.PassiveAggressiveRegressor(random_state=0)))
     models.append(('GaussionNB', GaussianNB()))
@@ -92,6 +91,6 @@ def train(parkingID):
     print"\nBest: %s\t\tMSE: %f" %(best,bestMSE)
 
 # for each parkingID
-train(2)
-#train(4)
-#train(5)
+evaluate(2)
+evaluate(4)
+evaluate(5)
