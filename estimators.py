@@ -88,7 +88,7 @@ def evaluate(parkingID):
             bestMSE=error
             best=name
 
-    print"\nBest: %s\t\tMSE: %f" %(best,bestMSE)
+    print"\nBest: %s\t\tMSE: %f\n" %(best,bestMSE)
 
 # for each parkingID
 evaluate(2)

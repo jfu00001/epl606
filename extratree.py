@@ -3,8 +3,8 @@ import pandas
 
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.metrics import mean_squared_error as mse
-import sklearn.model_selection import train_test_split
-import sklearn.ensemble import ExtraTreesRegressor as ET
+from sklearn.model_selection import train_test_split
+from sklearn.ensemble import ExtraTreesRegressor as ET
 from sklearn.externals import joblib
 
 import schedule
@@ -49,33 +49,35 @@ def train(parkingID):
     del dataset['space']
     trainSet,testSet,trainTarget,testTarget = train_test_split(dataset,targetSet,test_size=0.4,random_state=0)
     
-	model = ET(n_estimators=100, random_state=0)  
-	estimator = model.fit(trainSet,trainTarget)
-	prediction = estimator.predict(testSet)	
-	error = mse(prediction,testTarget)
-	print "MSE for parking %d: %f" % (int(parkingID),  error)
+    model = ET(n_estimators=100, random_state=0)  
+    estimator = model.fit(trainSet,trainTarget)
+    prediction = estimator.predict(testSet)	
+    error = mse(prediction,testTarget)
+    print "MSE for parking %d: %f" % (int(parkingID),  error)
 	
-	# store estimator
-	filename = "%s.joblib" % str(parkindID)
-	estimator.dump(clf, filename) 
+    # store estimator
+    filename = "%d.joblib" % int(parkingID)
+    joblib.dump(estimator, filename) 
 
 # for each parkingID
 train(2)
 train(4)
 train(5)
 
-def predict(ParkingID, timestamp):
-	filename = "%s.joblib" % str(parkindID)
-	estimator = joblib.load(filename)
-	prediction = estimator.predict(timestamp)
-	error = mse(prediction,testTarget)
-	print "MSE for parking %d: %f" % (int(parkingID),  error)
-	return prediction
-	
-#schedule.every().day.at("04:00").do(train,2)
-#schedule.every().day.at("04:00").do(train,4)
-#schedule.every().day.at("04:00").do(train,5)
+# function for userInput
+def predict(parkingID, timestamp):
+    filename = "%d.joblib" % int(parkindID)
+    estimator = joblib.load(filename)
+    prediction = estimator.predict(timestamp)
+    error = mse(prediction,testTarget)
+    print "MSE for parking %d: %f" % (int(parkingID),  error)
+    return prediction
 
-#while True:
-#	schedule.run_pending()
-#	time.sleep(60) # wait a minute
+# redo learning daily at 4 am
+# schedule.every().day.at("04:00").do(train,2)
+# schedule.every().day.at("04:00").do(train,4)
+# schedule.every().day.at("04:00").do(train,5)
+
+# while True:
+#    schedule.run_pending()
+#    time.sleep(60) # wait a minute
