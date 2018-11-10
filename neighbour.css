@@ -2,14 +2,17 @@
 #gmap_canvas {
 height: 650px;
 position: relative;
-width: 850px;
+width: 81%;
+display:inline-block;
 }
 .actions {
 background-color: #FFFFFF;
 bottom: 30px;
 padding: 10px;
-position: absolute;
-right: 30px;
+position: relative;
+display:inline-block;
+width: 18%; 
+/*right: 220px;*/
 z-index: 2;
 border-top: 1px solid #abbbcc;
 border-left: 1px solid #a7b6c7;
@@ -52,7 +55,7 @@ margin-bottom: 5px;
 padding: 6px 0 7px 0;
 text-align: center;
 text-shadow: 0 1px 1px #fff;
-width: 150px;
+width: 100%;
 }
 .button:hover {
 background-color: #ccd9e8;
