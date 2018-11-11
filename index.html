@@ -11,78 +11,37 @@
         <script type="text/javascript" src="https://www.google.com/jsapi"></script>
         <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCIOuH3LKiE4RGFl3Gr45aopd7MyyHNEEA&libraries=places&sensor=false"></script>
 		<script src="scripts/google_places.js"></script>
+		
     </head>
     <body class="w3-light-grey">
 		<!-- Navigation Bar -->
 		<div class="w3-bar w3-white w3-border-bottom w3-xlarge">
 		  <img src="smartparking.png" style="width: 150px; padding-top: 5px; padding-left: 10px;"><img>
-		  <a href="#" class="w3-bar-item w3-button w3-right w3-hover-red w3-text-grey"><i class="fa fa-search"></i></a>
+		 <!--  <a href="#" class="w3-bar-item w3-button w3-right w3-hover-red w3-text-grey"><i class="fa fa-search"></i></a>-->
 		</div>
 		<!-- Page content -->
-		<div class="w3-content" style="max-width:1100px;">
+		<div class="w3-content myclass" style="max-width:1100px;">
 		 <br>
 		  <div class="w3-row-padding">
 			<div class="w3-full w3-margin-bottom">
 				<h2>Available Parking</h2>
 			   <div id="gmap_canvas"></div>
 			   
-			  <div class="actions">
-					<input type="hidden" id="lat" name="lat" value=35.1443279></input>
-					<input type="hidden" id="lng" name="lng" value=33.4113395></input>
-							
-					<!-- NetworkStatus** -->
-					<h4> Status: </h4>
-					<p><output id="networkStatus"></output></p>
-					<!-- NetworkStatus** -->
-					
-					<!-- **GPSCoordinates -->     
-					<h4> GPSCoordinates: </h4> 
-					<p><output id="gpsCoordinates"></output></p>
-					<!-- GPSCoordinates ** -->
-				  
-					<!-- DateTime** -->
-					<h4> Date Time: </h4> 
-					<span id="date_time"></span>
-					<script type="text/javascript">window.onload = date_time('date_time');</script>
-					<!-- DateTime** -->           
-				  
-					<div class="button">
-					  <label for="gmap_radius">Radius:</label>
-					  <select id="gmap_radius">
-						<option value="500">500</option>
-						<option value="1000">1000</option>
-						<option value="1500">2000</option>
-						<option value="5000">5000</option>
-						<option value="5000">10000</option>         </select>
-					</div>
-
-					<div id="button1" class="button" onclick="findPlaces(); return false;">Search</div>
-				</div>
-			</div>
-		  </div>
-		  <div class="w3-row-padding">
-			<div class="w3-full w3-margin-bottom">
-			  <div class="w3-container w3-white">
-				 <h2>Parking Details</h2>
-				 <p>The available parkings are:</p>
-				 <i class="fa fa-map-marker" style="width:30px"></i> Chicago, US<br>
-				 <i class="fa fa-info-circle" style="width:30px"></i> Phone: +00 151515<br>
-				 <i class="fa fa-signal" style="width:30px"> </i> Email: mail@mail.com<br>
-				 <br>
-			  </div>
-			</div>
-		  </div>
-		  <!-- Contact -->
-		  <div class="w3-container">
-			<h2>Availability on specific time</h2>
+			 <div class="w3-container "id="gmap_input">
+			<h3>Availability on specific time</h3>
 			<p>Enter the time you want the parking:</p>
 			<form action="/action_page.php" target="_blank">
 			  <p><input class="w3-input w3-padding-16 w3-border" type="text" placeholder="Name" required name="Name"></p>
-			  <p><input class="w3-input w3-padding-16 w3-border" type="text" placeholder="Location" required name="Location"></p>
-			  <p><input class="w3-input w3-padding-16 w3-border" type="text" placeholder="Current Availability" required name="Current Availability"></p>
+			  <p><input class="w3-input w3-padding-16 w3-border" type="text" placeholder="Time" required name="Time"></p>
+			  <p class="w3-input w3-padding-16 w3-border" id="Availability">Availability</p>
 			  <p><button class="w3-button w3-black w3-padding-large" type="submit">SUBMIT</button></p>
 			</form>
 		  </div>
+			</div>
+		  </div>
+		 
+		  <!-- Contact -->
+		 
 		<!-- End page content -->
 		</div>
 		<!-- Footer -->

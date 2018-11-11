@@ -2,8 +2,18 @@
 #gmap_canvas {
 height: 650px;
 position: relative;
-width: 81%;
+width: 69%;
 display:inline-block;
+}
+#gmap_input {
+height: 650px;
+position: relative;
+width: 30%;
+display:inline-block;
+}
+.myclass{
+	margin-left:15%!important;
+	
 }
 .actions {
 background-color: #FFFFFF;
