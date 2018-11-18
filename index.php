@@ -32,14 +32,14 @@
 			<p>Enter the time you want the parking:</p>
 			<form action="/action_page.php" target="_blank">
 			  <p><input class="w3-input w3-padding-16 w3-border" type="text" placeholder="Name" required name="Name"></p>
-			  <p><input class="w3-input w3-padding-16 w3-border" type="text" placeholder="Time" required name="Time"></p>
+			  <p><input class="w3-input w3-padding-16 w3-border" type="datetime-local" placeholder="Time" required name="Time"></p>
 			  <p class="w3-input w3-padding-16 w3-border" id="Availability">Availability</p>
 			  <p><button class="w3-button w3-black w3-padding-large" type="submit">SUBMIT</button></p>
 			</form>
 		  </div>
 			</div>
 		  </div>
-		 
+		 <!-- https://stackoverflow.com/questions/19735250/running-a-python-script-from-php -->
 		  <!-- Contact -->
 		 
 		<!-- End page content -->
@@ -55,5 +55,23 @@
 			<i class="fa fa-linkedin w3-hover-opacity"></i>
 		  </div>
 		</footer>
+
+		<script>
+			function placemarkers() {
+				<?php
+				  $dbc = mysqli_connect("localhost","ubuntu","epl606","parking");
+				  $result = mysqli_query($dbc,"SELECT * FROM parking");
+              	  while ($entry = mysqli_fetch_object($result)) {
+              	  	
+              	  	$space = mysqli_query($dbc,"SELECT space FROM `data` where parking_id = ".$entry->uid." order by timestamp DESC LIMIT 1");
+              	  	$spacenow = mysqli_fetch_object($space);
+              	  	echo "markParking(".$entry->lat.",".$entry->lon.",'".$entry->title."','".$spacenow->space."');";
+
+              	  }
+				?>
+				// markParking("35.171279", "33.357727", "title", "3");
+
+			}
+		</script>
 	</body>
 </html>
