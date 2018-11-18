@@ -60,18 +60,23 @@ def train(parkingID):
     joblib.dump(estimator, filename) 
 
 # for each parkingID
-train(2)
-train(4)
-train(5)
+# train(2)
+# train(4)
+# train(5)
 
 # function for userInput
 def predict(parkingID, timestamp):
-    filename = "%d.joblib" % int(parkindID)
+    # filename = "%d.joblib" % int(parkindID)
+    filename = parkingID+".joblib"
     estimator = joblib.load(filename)
     prediction = estimator.predict(timestamp)
-    error = mse(prediction,testTarget)
-    print "MSE for parking %d: %f" % (int(parkingID),  error)
+    # error = mse(prediction,testTarget)
+    # print "MSE for parking %d: %f" % (int(parkingID),  error)
+    print prediction
     return prediction
+predict("2", 1542132000)
+predict("4", 1542132000)
+predict("5", 1542132000)
 
 # redo learning daily at 4 am
 # schedule.every().day.at("04:00").do(train,2)
