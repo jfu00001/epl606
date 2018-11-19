@@ -33,12 +33,16 @@ def normalize(data):
 def createAvailabilityGroups(data):
     target=[]
     for i in data['space']:
-        if i<0.33:
+        if i<0.2:
             target.append(0)
-        elif i>0.66:
-            target.append(1)
+        elif i>0.2 and i<0.4:
+            target.append(0.25)
+        elif i>0.4 and i<0.6:
+            target.append(0.5)
+        elif i>0.6 and i<0.8:
+            target.append(0.75)
         else:
-           target.append(0.5)
+           target.append(1)
     
     return target
 

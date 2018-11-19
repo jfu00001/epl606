@@ -2,10 +2,10 @@ import mysql.connector
 import pandas
 
 from sklearn.preprocessing import MinMaxScaler
-from sklearn.metrics import mean_squared_error as mse
 from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestRegressor as RF
 from sklearn.externals import joblib
+#from sklearn.metrics import mean_squared_error as mse
 
 import schedule
 import time
@@ -32,13 +32,17 @@ def normalize(data):
 def createAvailabilityGroups(data):
     target=[]
     for i in data['space']:
-        if i<0.33:
+        if i<0.2:
             target.append(0)
-        elif i>0.66:
-            target.append(1)
+        elif i>0.2 and i<0.4:
+            target.append(0.25)
+        elif i>0.4 and i<0.6:
+            target.append(0.5)
+        elif i>0.6 and i<0.8:
+            target.append(0.75)
         else:
-           target.append(0.5)
-    
+           target.append(1)
+      
     return target
 
 def train(parkingID):
@@ -52,32 +56,18 @@ def train(parkingID):
     model = RF(n_estimators=100, random_state=0)  
     estimator = model.fit(trainSet,trainTarget)
     prediction = estimator.predict(testSet)	
-    error = mse(prediction,testTarget)
-    print "MSE for parking %d: %f" % (int(parkingID),  error)
+    #error = mse(prediction,testTarget)
+    #print "MSE for parking %d: %f" % (int(parkingID),  error)
 	
     # store estimator
     filename = "%d.joblib" % int(parkingID)
     joblib.dump(estimator, filename) 
 
-# for each parkingID
-train(2)
-train(4)
-train(5)
-
-# function for userInput
-def predict(parkingID, timestamp):
-    filename = "%d.joblib" % int(parkindID)
-    estimator = joblib.load(filename)
-    prediction = estimator.predict(timestamp)
-    error = mse(prediction,testTarget)
-    print "MSE for parking %d: %f" % (int(parkingID),  error)
-    return prediction
-
 # redo learning daily at 4 am
-# schedule.every().day.at("04:00").do(train,2)
-# schedule.every().day.at("04:00").do(train,4)
-# schedule.every().day.at("04:00").do(train,5)
+# schedule.every().day.at("04:00").do(train,2) #extraTree
+schedule.every().day.at("04:00").do(train,4)
+schedule.every().day.at("04:00").do(train,5)
 
-# while True:
-#    schedule.run_pending()
-#    time.sleep(60) # wait a minute
+while True:
+	schedule.run_pending()
+	time.sleep(60)
