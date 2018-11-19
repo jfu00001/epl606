@@ -24,10 +24,6 @@ def getData(parkingID):
     del data['parking_id']
     mydb.close()
     return data
-
-def normalize(data):
-   scaler = MinMaxScaler()
-   return pandas.DataFrame(scaler.fit_transform(data),columns=data.columns)
    
 def createAvailabilityGroups(data):
     target=[]
@@ -47,13 +43,23 @@ def createAvailabilityGroups(data):
 
 def evaluate(parkingID):
     dataset = getData(int(parkingID))
-    dataset = normalize(dataset)
-    targetSet = createAvailabilityGroups(dataset)
-    
+
+    #set targets
+    target = pandas.DataFrame()
+    target['space'] = dataset['space']
     del dataset['space']
-    trainSet,testSet,trainTarget,testTarget = model_selection.train_test_split(dataset,targetSet,test_size=0.4,random_state=0)
+    targets = pandas.DataFrame(MinMaxScaler().fit_transform(target),columns=target.columns)
+    targetSet = createAvailabilityGroups(targets)
+
+    # create train and test sets       
+    trainSet,testSet, trainTarget,testTarget = train_test_split(dataset, targetSet, test_size=0.4,random_state=0)
     
-    # Spot Check Algorithms
+    # create normalizer using trainSet, apply it to testSet and store it for later use
+    scaler = MinMaxScaler()
+    trainSet = pandas.DataFrame(scaler.fit_transform(trainSet),columns=trainSet.columns)
+    testSet = pandas.DataFrame(scaler.transform(testSet), columns=testSet.columns)
+    
+	# Spot Check Algorithms
     models = []
     models.append(('ARD', linear_model.ARDRegression()))   
     models.append(('RidgeCV', linear_model.RidgeCV(cv=model_selection.KFold(n_splits=10,random_state=0))))

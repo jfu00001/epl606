@@ -5,11 +5,12 @@ from sklearn.preprocessing import MinMaxScaler
 from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestRegressor as RF
 from sklearn.externals import joblib
-#from sklearn.metrics import mean_squared_error as mse
+from sklearn.metrics import mean_squared_error as mse
 
 import schedule
 import time
 
+# get data from server
 def getData(parkingID):
     mydb = mysql.connector.connect(
 		host="localhost",
@@ -24,10 +25,7 @@ def getData(parkingID):
     mydb.close()
     return data
 
-def normalize(data):
-   scaler = MinMaxScaler()
-   return pandas.DataFrame(scaler.fit_transform(data),columns=data.columns)
-
+# reduce target in 5 option
 def createAvailabilityGroups(data):
     target=[]
     for i in data['space']:
@@ -39,34 +37,49 @@ def createAvailabilityGroups(data):
             target.append(0.5)
         elif i>0.6 and i<0.8:
             target.append(0.75)
-        else:
+        elif i>0.8:
            target.append(1)
-      
+     
     return target
 
 def train(parkingID):
     dataset = getData(int(parkingID))
-    dataset = normalize(dataset)
-    targetSet = createAvailabilityGroups(dataset)
 
+    #set targets
+    target = pandas.DataFrame()
+    target['space'] = dataset['space']
     del dataset['space']
-    trainSet,testSet,trainTarget,testTarget = train_test_split(dataset,targetSet,test_size=0.4,random_state=0)
+    targets = pandas.DataFrame(MinMaxScaler().fit_transform(target),columns=target.columns)
+    targetSet = createAvailabilityGroups(targets)
+
+    # create train and test sets       
+    trainSet,testSet, trainTarget,testTarget = train_test_split(dataset, targetSet, test_size=0.4,random_state=0)
     
+    # create normalizer using trainSet, apply it to testSet and store it for later use
+    scaler = MinMaxScaler()
+    trainSet = pandas.DataFrame(scaler.fit_transform(trainSet),columns=trainSet.columns)
+    testSet = pandas.DataFrame(scaler.transform(testSet), columns=testSet.columns)
+    scalerFile = "parking" + str(parkingID) + "_scaler.joblib"
+    joblib.dump(scaler,scalerFile)
+    
+    #train using RandomForest  
     model = RF(n_estimators=100, random_state=0)  
     estimator = model.fit(trainSet,trainTarget)
-    prediction = estimator.predict(testSet)	
-    #error = mse(prediction,testTarget)
-    #print "MSE for parking %d: %f" % (int(parkingID),  error)
-    
-    # store estimator
-    filename = "%d.joblib" % int(parkingID)
+    ## for debug
+    prediction = estimator.predict(testSet)
+    error = mse(prediction,testTarget)
+    print "MSE for parking %d: %f" % (int(parkingID),  error)
+
+    # storemodel
+    filename = "parking%d_model.joblib" % int(parkingID)
     joblib.dump(estimator, filename) 
 
 # redo learning daily at 4 am
-# schedule.every().day.at("04:00").do(train,2) #extraTree
-schedule.every().day.at("04:00").do(train,4)
-schedule.every().day.at("04:00").do(train,5)
-
-while True:
-    schedule.run_pending()
-    time.sleep(60)
+#schedule.every().day.at("04:00").do(train,2)
+#schedule.every().day.at("04:00").do(train,4) # randomForest
+#schedule.every().day.at("04:00").do(train,5) # randomForest
+train(4)
+train(5)
+#while True:
+#    schedule.run_pending()
+#    time.sleep(60)
