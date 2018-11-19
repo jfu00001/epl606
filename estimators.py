@@ -30,13 +30,13 @@ def createAvailabilityGroups(data):
     for i in data['space']:
         if i<0.2:
             target.append(0)
-        elif i>0.2 and i<0.4:
+        elif i>=0.2 and i<0.4:
             target.append(0.25)
-        elif i>0.4 and i<0.6:
+        elif i>=0.4 and i<0.6:
             target.append(0.5)
-        elif i>0.6 and i<0.8:
+        elif i>=0.6 and i<0.8:
             target.append(0.75)
-        elif i>0.8:
+        elif i>=0.8:
            target.append(1)
     
     return target
@@ -52,7 +52,7 @@ def evaluate(parkingID):
     targetSet = createAvailabilityGroups(targets)
 
     # create train and test sets       
-    trainSet,testSet, trainTarget,testTarget = train_test_split(dataset, targetSet, test_size=0.4,random_state=0)
+    trainSet,testSet, trainTarget,testTarget = model_selection.train_test_split(dataset, targetSet, test_size=0.4,random_state=0)
     
     # create normalizer using trainSet, apply it to testSet and store it for later use
     scaler = MinMaxScaler()
@@ -63,7 +63,7 @@ def evaluate(parkingID):
     models = []
     models.append(('ARD', linear_model.ARDRegression()))   
     models.append(('RidgeCV', linear_model.RidgeCV(cv=model_selection.KFold(n_splits=10,random_state=0))))
-    #models.append(('BayisionRidge', linear_model.BayesianRidge()))
+    models.append(('BayisionRidge', linear_model.BayesianRidge()))
     models.append(('Huber', linear_model.HuberRegressor()))
     models.append(('Lars', linear_model.LarsCV(cv=model_selection.KFold(n_splits=10,random_state=0))))
     models.append(('Lasso', linear_model.LassoCV(cv=model_selection.KFold(n_splits=10,random_state=0))))
@@ -93,7 +93,7 @@ def evaluate(parkingID):
         if error < bestMSE:
             bestMSE=error
             best=name
-        print name +" done"
+
     print"\nBest: %s\t\tMSE: %f\n" %(best,bestMSE)
 
 # for each parkingID
