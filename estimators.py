@@ -27,9 +27,8 @@ def getData(parkingID):
 
 def normalize(data):
    scaler = MinMaxScaler()
-   scaler.fit(data)
-   scaler.transform(data)
-
+   return pandas.DataFrame(scaler.fit_transform(data),columns=data.columns)
+   
 def createAvailabilityGroups(data):
     target=[]
     for i in data['space']:
@@ -41,27 +40,24 @@ def createAvailabilityGroups(data):
             target.append(0.5)
         elif i>0.6 and i<0.8:
             target.append(0.75)
-        else:
+        elif i>0.8:
            target.append(1)
     
     return target
 
 def evaluate(parkingID):
     dataset = getData(int(parkingID))
-    #print(dataset)
-    normalize(dataset)
-    #print(dataset)
+    dataset = normalize(dataset)
     targetSet = createAvailabilityGroups(dataset)
-    #print(targetSet)
+    
     del dataset['space']
-
     trainSet,testSet,trainTarget,testTarget = model_selection.train_test_split(dataset,targetSet,test_size=0.4,random_state=0)
     
     # Spot Check Algorithms
     models = []
     models.append(('ARD', linear_model.ARDRegression()))   
     models.append(('RidgeCV', linear_model.RidgeCV(cv=model_selection.KFold(n_splits=10,random_state=0))))
-    models.append(('BayisionRidge', linear_model.BayesianRidge()))
+    #models.append(('BayisionRidge', linear_model.BayesianRidge()))
     models.append(('Huber', linear_model.HuberRegressor()))
     models.append(('Lars', linear_model.LarsCV(cv=model_selection.KFold(n_splits=10,random_state=0))))
     models.append(('Lasso', linear_model.LassoCV(cv=model_selection.KFold(n_splits=10,random_state=0))))
@@ -91,7 +87,7 @@ def evaluate(parkingID):
         if error < bestMSE:
             bestMSE=error
             best=name
-
+        print name +" done"
     print"\nBest: %s\t\tMSE: %f\n" %(best,bestMSE)
 
 # for each parkingID

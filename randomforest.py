@@ -26,8 +26,7 @@ def getData(parkingID):
 
 def normalize(data):
    scaler = MinMaxScaler()
-   scaler.fit(data)
-   scaler.transform(data)
+   return pandas.DataFrame(scaler.fit_transform(data),columns=data.columns)
 
 def createAvailabilityGroups(data):
     target=[]
@@ -47,7 +46,7 @@ def createAvailabilityGroups(data):
 
 def train(parkingID):
     dataset = getData(int(parkingID))
-    normalize(dataset)
+    dataset = normalize(dataset)
     targetSet = createAvailabilityGroups(dataset)
 
     del dataset['space']
@@ -58,7 +57,7 @@ def train(parkingID):
     prediction = estimator.predict(testSet)	
     #error = mse(prediction,testTarget)
     #print "MSE for parking %d: %f" % (int(parkingID),  error)
-	
+    
     # store estimator
     filename = "%d.joblib" % int(parkingID)
     joblib.dump(estimator, filename) 
@@ -69,5 +68,5 @@ schedule.every().day.at("04:00").do(train,4)
 schedule.every().day.at("04:00").do(train,5)
 
 while True:
-	schedule.run_pending()
-	time.sleep(60)
+    schedule.run_pending()
+    time.sleep(60)
