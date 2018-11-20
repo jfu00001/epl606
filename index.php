@@ -3,7 +3,7 @@
     <head>
         <meta charset="utf-8" />
         <title> SmartParking </title>
-        <link href="neighbour.css" rel="stylesheet" type="text/css" />
+        <link href="styles.css" rel="stylesheet" type="text/css" />
 		<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 		<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -24,26 +24,23 @@
 		 <br>
 		  <div class="w3-row-padding">
 			<div class="w3-full w3-margin-bottom">
-				<h2>Available Parking</h2>
+			   <h2>Available Parking</h2>
 			   <div id="gmap_canvas"></div>
 			   
-			 <div class="w3-container "id="gmap_input">
-			<h3>Availability on specific time</h3>
-			<p>Enter the time you want the parking:</p>
-			<form action="/action_page.php" target="_blank">
-			  <p><input class="w3-input w3-padding-16 w3-border" type="text" placeholder="Name" required name="Name"></p>
-			  <p><input class="w3-input w3-padding-16 w3-border" type="datetime-local" placeholder="Time" required name="Time"></p>
-			  <p class="w3-input w3-padding-16 w3-border" id="Availability">Availability</p>
-			  <p><button class="w3-button w3-black w3-padding-large" type="submit">SUBMIT</button></p>
-			</form>
-		  </div>
+				<div class="w3-container "id="gmap_input">
+					<p>Predict parking availability:</p>
+					<form action="/runPy.php">
+					  <p><input class="w3-input w3-padding-16 w3-border" type="text" placeholder="Name" id="parking_title" readonly></p>
+					  <p><input class="w3-input w3-padding-16 w3-border" type="datetime-local" placeholder="Time"></p>
+					  <p><button class="w3-button w3-black w3-padding-large" type="submit">SUBMIT</button></p>
+					</form>
+				</div>
 			</div>
 		  </div>
-		 <!-- https://stackoverflow.com/questions/19735250/running-a-python-script-from-php -->
-		  <!-- Contact -->
-		 
+		 <!-- https://stackoverflow.com/questions/19735250/running-a-python-script-from-php -->		 
 		<!-- End page content -->
 		</div>
+		
 		<!-- Footer -->
 		<footer class="w3-container w3-center w3-opacity w3-margin-bottom">
 		  <div class="w3-xlarge w3-padding-16">
@@ -70,8 +67,9 @@
               	  }
 				?>
 				// markParking("35.171279", "33.357727", "title", "3");
-
 			}
+			/* 0 0.25 0.5 0.75 1 */			
 		</script>
+		
 	</body>
 </html>
