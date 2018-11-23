@@ -29,9 +29,9 @@
 			   
 				<div class="w3-container "id="gmap_input">
 					<p>Predict parking availability:</p>
-					<form action="/runPy.php">
+					<form id="submit-form">
 					  <p><input class="w3-input w3-padding-16 w3-border" type="text" placeholder="Name" id="parking_title" readonly></p>
-					  <p><input class="w3-input w3-padding-16 w3-border" type="datetime-local" placeholder="Time"></p>
+					  <p><input class="w3-input w3-padding-16 w3-border" type="datetime-local" placeholder="Time" id="time"></p>
 					  <p><button class="w3-button w3-black w3-padding-large" type="submit">SUBMIT</button></p>
 					</form>
 				</div>
@@ -62,7 +62,7 @@
               	  	
               	  	$space = mysqli_query($dbc,"SELECT space FROM `data` where parking_id = ".$entry->uid." order by timestamp DESC LIMIT 1");
               	  	$spacenow = mysqli_fetch_object($space);
-              	  	echo "markParking(".$entry->lat.",".$entry->lon.",'".$entry->title."','".$spacenow->space."');";
+              	  	echo "markParking(".$entry->lat.",".$entry->lon.",'".$entry->title."','".$spacenow->space."','".$entry->uid."');";
 
               	  }
 				?>

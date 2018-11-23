@@ -10,6 +10,8 @@ from sklearn.metrics import mean_squared_error as mse
 import schedule
 import time
 
+from datetime import datetime
+from threading import Timer
 # get data from server
 def getData(parkingID):
     mydb = mysql.connector.connect(
@@ -74,11 +76,30 @@ def train(parkingID):
     filename = "parking%d_model.joblib" % int(parkingID)
     joblib.dump(estimator, filename) 
 
-# redo learning daily at 4 am
-#schedule.every().day.at("04:00").do(train,2)
-#schedule.every().day.at("04:00").do(train,4) # randomForest
-#schedule.every().day.at("04:00").do(train,5) # randomForest
-train(2)
-#while True:
-#    schedule.run_pending()
-#    time.sleep(60)
+    f = open("extrateetrain.log","a+")
+    f.write(str(datetime.now())+"\n")
+    f.close
+    x=datetime.today()
+    
+    y=x.replace(day=x.day+1, hour=4, minute=0, second=0, microsecond=0)
+    delta_t=y-x
+    secs=delta_t.seconds+1
+    t = Timer(secs, train(2))
+    t.start()
+
+
+
+
+
+# train(2)
+
+
+x=datetime.today()
+y=x.replace(day=x.day+1, hour=4, minute=0, second=0, microsecond=0)
+delta_t=y-x
+
+secs=delta_t.seconds+1
+
+t = Timer(secs, train(2))
+t.start()
+

@@ -61,21 +61,21 @@ def evaluate(parkingID):
     
 	# Spot Check Algorithms
     models = []
-    models.append(('ARD', linear_model.ARDRegression()))   
+#    models.append(('ARD', linear_model.ARDRegression()))   
     models.append(('RidgeCV', linear_model.RidgeCV(cv=model_selection.KFold(n_splits=10,random_state=0))))
     models.append(('BayisionRidge', linear_model.BayesianRidge()))
     models.append(('Huber', linear_model.HuberRegressor()))
     models.append(('Lars', linear_model.LarsCV(cv=model_selection.KFold(n_splits=10,random_state=0))))
     models.append(('Lasso', linear_model.LassoCV(cv=model_selection.KFold(n_splits=10,random_state=0))))
     models.append(('Linear', linear_model.LinearRegression()))
-    models.append(('Logistic', linear_model.LogisticRegression())) 
+#    models.append(('Logistic', linear_model.LogisticRegression())) 
     models.append(('AdaBoost', ensemble.AdaBoostRegressor()))
     models.append(('ExtraTree', ensemble.ExtraTreesRegressor(n_estimators=100, random_state=0)))
     models.append(('RandomForest', ensemble.RandomForestRegressor(n_estimators=100, random_state=0)))
     models.append(('PassiveAgressive', linear_model.PassiveAggressiveRegressor(random_state=0)))
-    models.append(('GaussionNB', GaussianNB()))
-    models.append(('SVM', SVC()))
-    models.append(('LDA', LinearDiscriminantAnalysis()))
+#    models.append(('GaussionNB', GaussianNB()))
+#    models.append(('SVM', SVC()))
+#    models.append(('LDA', LinearDiscriminantAnalysis()))
 
     # evaluate each model in turn
     results = []
