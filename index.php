@@ -31,7 +31,11 @@
 					<form id="submit-form">
 					  <input class="w3-input w3-border" type="text" placeholder="Name" id="parking_title" readonly>
 					  <p><input class="w3-input w3-border" type="datetime-local" placeholder="Time" id="time"></p>
+					  <div id="availability" style="display: inline-block;position: relative;">
+					  	Availability
+					  </div>
 					  <p><button class="w3-button w3-black" type="submit">SUBMIT</button></p>
+
 					</form>
 					
 				</div>
