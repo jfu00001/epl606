@@ -8,6 +8,7 @@ import sklearn.model_selection as model_selection
 import sklearn.ensemble as ensemble
 import sklearn.linear_model as linear_model
 from datetime import datetime
+
 def getData(parkingID):
     mydb = mysql.connector.connect(
         host="localhost",
@@ -48,19 +49,16 @@ def evaluate(parkingID):
     targets = pandas.DataFrame(MinMaxScaler().fit_transform(target),columns=target.columns)
     targetSet = createAvailabilityGroups(targets)
 
+	# exclude day,date from timestamp and normalize based on 24h
     for x in xrange(0,len(dataset['timestamp'])):
         ts = int(dataset['timestamp'][x])
         h = datetime.utcfromtimestamp(ts).strftime('%H')
         m = datetime.utcfromtimestamp(ts).strftime('%M')
         dataset['timestamp'][x] = str(int(h)*60+int(m))
+		
     # create train and test sets       
     trainSet,testSet, trainTarget,testTarget = model_selection.train_test_split(dataset, targetSet, test_size=0.4,random_state=0)
-    
-    # create normalizer using trainSet, apply it to testSet and store it for later use
-    # scaler = MinMaxScaler()
-    # trainSet = pandas.DataFrame(scaler.fit_transform(trainSet),columns=trainSet.columns)
-    # testSet = pandas.DataFrame(scaler.transform(testSet), columns=testSet.columns)
-    
+     
 	# Spot Check Algorithms
     models = []
     models.append(('RidgeCV', linear_model.RidgeCV(cv=model_selection.KFold(n_splits=10,random_state=0))))

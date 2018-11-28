@@ -3,6 +3,7 @@ import mysql.connector
 from xml.dom import minidom
 import urllib2
 import os
+
 def executeSomething():
 	newpid = os.fork()
 	if newpid == 0:
@@ -31,5 +32,3 @@ def executeSomething():
 
 while True:
     executeSomething()
-	
-	
