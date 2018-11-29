@@ -83,8 +83,8 @@ def train(parkingID):
 # train(4)
 # train(5)
 
-schedule.every().day.at("06:00").do(train,4)
-schedule.every().day.at("06:10").do(train,5)
+schedule.every().day.at("02:00").do(train,4)
+schedule.every().day.at("02:10").do(train,5)
 
 while True:
     schedule.run_pending()

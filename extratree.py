@@ -81,7 +81,7 @@ def train(parkingID):
     f.close
 
 # train(2)
-schedule.every().day.at("06:00").do(train,2)
+schedule.every().day.at("02:00").do(train,2)
 
 while True:
     schedule.run_pending()
